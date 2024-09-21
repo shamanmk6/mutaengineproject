@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     axios
       .post(
-        "https://52.66.113.235/",
+        "https://goshopper.shop/",
         { email, password,recaptchaValue},
         {
           headers: { "Content-Type": "application/json" },
@@ -44,7 +44,7 @@ function Login() {
     setRecaptchaValue(value);
   }
   const handleGoogleLogin = () => {
-    window.location.href = "https://52.66.113.235/auth/google";
+    window.location.href = "https://goshopper.shop/auth/google";
   };
   const handleForgotPassword = () => {
     console.log("forgot password");

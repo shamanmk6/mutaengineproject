@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   let handleLogout = () => {
     axios
-      .post("https://52.66.113.235/logout", {}, { withCredentials: true })
+      .post("https://goshopper.shop/logout", {}, { withCredentials: true })
       .then((response) => {
         navigate("/");
       });

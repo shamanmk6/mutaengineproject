@@ -10,7 +10,7 @@ function ForgotPassword() {
     event.preventDefault();
 
     axios
-      .post("https://52.66.113.235/forgot-password", { email: email })
+      .post("https://goshopper.shop/forgot-password", { email: email })
       .then((response) => {
         const userId = response.data.userId;
         const otp = response.data.otp;

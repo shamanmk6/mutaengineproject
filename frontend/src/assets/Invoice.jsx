@@ -11,7 +11,7 @@ function Invoice() {
     setSuccessMessage("");
     axios
       .post(
-        "https://52.66.113.235/download-invoice",
+        "https://goshopper.shop/download-invoice",
         {},
         { responseType: "blob" }
       )
@@ -30,7 +30,7 @@ function Invoice() {
   };
   const handleEmail = () => {
     axios
-      .post("https://52.66.113.235/mail-invoice", { user: user })
+      .post("https://goshopper.shop/mail-invoice", { user: user })
       .then((response) => {
         console.log("Invoice sent via  mail!", response.data);
         setSuccessMessage(response.data.message);

@@ -19,7 +19,7 @@ function Signup() {
 
     axios
       .post(
-        "https://52.66.113.235/register",
+        "https://goshopper.shop/register",
         {
           email: email,
           username: username,
