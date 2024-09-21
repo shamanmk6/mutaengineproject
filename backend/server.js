@@ -19,9 +19,10 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 const corsOptions = {
-  origin: "https://master.d114m935qn6bgy.amplifyapp.com/",
+  origin: ["https://master.d114m935qn6bgy.amplifyapp.com", "http://localhost:3000"],
   credentials: true,
 };
+
 
 app.use(cookieParser());
 app.use(cors(corsOptions));
