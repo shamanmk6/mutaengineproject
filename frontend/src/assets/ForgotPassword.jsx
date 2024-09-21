@@ -7,12 +7,11 @@ function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const handleSubmit = (event) => {
-    event.preventDefault(); // Prevents the form from reloading the page
+    event.preventDefault();
 
     axios
       .post("http://localhost:3000/forgot-password", { email: email })
       .then((response) => {
-        console.log("Response from backend:", response.data);
         const userId = response.data.userId;
         const otp = response.data.otp;
         navigate("/enter-otp", { state: { userId, otp } });
@@ -31,7 +30,6 @@ function ForgotPassword() {
       <h1>Send email</h1>
       <form onSubmit={handleSubmit}>
         {" "}
-        {/* Added onSubmit handler */}
         <div className="form-group">
           <p>Email</p>
           <input

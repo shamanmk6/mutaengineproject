@@ -5,7 +5,7 @@ import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
-  const location=useLocation()
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -22,11 +22,9 @@ function Login() {
       )
 
       .then((response) => {
-        console.log(response);
-        // console.log("token is",result.data.token);
-        const user=response.data.user
+        const user = response.data.user;
         setErrorMessage("");
-        navigate("/home",{ replace: true,state:{user}});
+        navigate("/home", { replace: true, state: { user } });
       })
       .catch((error) => {
         if (error.response && error.response.data) {
@@ -41,17 +39,12 @@ function Login() {
   };
 
   const handleGoogleLogin = () => {
-    // Logic to handle Google login
-    console.log("Google Login initiated");
-    window.location.href = "http://localhost:3000/auth/google"; // Redirect to backend Google login
-    console.log("Google Login initiated");
+    window.location.href = "http://localhost:3000/auth/google";
   };
-   
-  const handleForgotPassword=()=>{
+  const handleForgotPassword = () => {
     console.log("forgot password");
-    navigate('/forgot-password')
-  }
-
+    navigate("/forgot-password");
+  };
   return (
     <div className="login-form">
       <h1>Login</h1>
@@ -83,7 +76,9 @@ function Login() {
       </form>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="signup-route">
-        <p onClick={handleForgotPassword} style={{cursor:"pointer"}} >Forgot Password?</p>
+        <p onClick={handleForgotPassword} style={{ cursor: "pointer" }}>
+          Forgot Password?
+        </p>
         <p>Don't have an account?</p>
         <Link className="signup-button" to="/register">
           Signup
@@ -92,5 +87,4 @@ function Login() {
     </div>
   );
 }
-
 export default Login;

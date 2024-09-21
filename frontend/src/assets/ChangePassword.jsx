@@ -29,7 +29,7 @@ function ChangePassword(){
     return(
         <div className="login-form">
         <h1>Change Password</h1>
-        <form onSubmit={handleSubmit}> {/* Added onSubmit handler */}
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <p>New Password</p>
             <input

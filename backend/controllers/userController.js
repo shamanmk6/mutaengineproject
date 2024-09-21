@@ -192,7 +192,7 @@ export const forgotPassword = async (req, res) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "mohammedshaman83@gmail.com",
+        user:process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
       },
     });
@@ -205,7 +205,7 @@ export const forgotPassword = async (req, res) => {
     });
 
     const mailOptions = {
-      from: "mohammedshaman83@gmail.com",
+      from:process.env.SMTP_EMAIL,
       to: email,
       subject: "For verification mail",
       text: `Your otp is: ${otp}`,
@@ -244,12 +244,11 @@ export const changePassword = async (req, res) => {
     console.log(error);
     return res
       .status(400)
-      .json({ message: "Error in changin password", success: false });
+      .json({ message: "Error in changing password", success: false });
   }
 };
 export const downloadInvoice = (req, res) => {
   try {
-    console.log("inside download invoice");
     const publicDir = path.join(__dirname, "..", "public", "files");
     if (!fs.existsSync(publicDir)) {
       fs.mkdirSync(publicDir, { recursive: true });
@@ -360,12 +359,12 @@ export const mailInvoice = async (req, res) => {
         secure: false,
         requireTLS: true,
         auth: {
-          user: "mohammedshaman83@gmail.com",
+          user:process.env.SMTP_EMAIL,
           pass: process.env.SMTP_PASSWORD,
         },
       });
       const mailOptions = {
-        from: "mohammedshaman83@gmail.com",
+        from:process.env.SMTP_EMAIL,
         to: email,
         subject: "Your Invoice",
         text: `Please find the attached your invoice`,

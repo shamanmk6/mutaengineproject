@@ -4,19 +4,18 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 function Invoice() {
-  const [successMessage,setSuccessMessage]=useState("")
-  const location=useLocation()
-  const {user}=location.state || {}
+  const [successMessage, setSuccessMessage] = useState("");
+  const location = useLocation();
+  const { user } = location.state || {};
   const handleDownload = () => {
-    setSuccessMessage("")
-    console.log("Download Invoice");
+    setSuccessMessage("");
     axios
       .post(
-        "http://localhost:3000/download-invoice",{},
+        "http://localhost:3000/download-invoice",
+        {},
         { responseType: "blob" }
       )
       .then((response) => {
-        console.log(response);
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -30,14 +29,11 @@ function Invoice() {
       });
   };
   const handleEmail = () => {
-    console.log("Email Invoice");
-    console.log(user);
-    
     axios
-      .post("http://localhost:3000/mail-invoice",{user:user})
+      .post("http://localhost:3000/mail-invoice", { user: user })
       .then((response) => {
         console.log("Invoice sent via  mail!", response.data);
-        setSuccessMessage(response.data.message)
+        setSuccessMessage(response.data.message);
       })
       .catch((error) => {
         console.log(error);
@@ -55,5 +51,4 @@ function Invoice() {
     </div>
   );
 }
-
 export default Invoice;

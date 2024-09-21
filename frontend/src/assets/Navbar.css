@@ -1,32 +1,32 @@
 .navbar {
     display: flex;
-    justify-content: space-between; /* Align items on opposite ends */
-    align-items: center; /* Center items vertically */
-    padding: 10px 20px; /* Add some padding */
-    background-color: #baf2f6; /* Light background color */
-    border-bottom: 1px solid #ddd; /* Optional bottom border */
-    width: 100%; /* Ensure full width */
-    box-shadow: 0 2px 4px rgba(249, 248, 248, 0.1); /* Optional shadow for depth */
-    position: fixed; /* Fix position at the top */
-    top: 0; /* Align to top */
-    left: 0; /* Align to left */
-    z-index: 1000; /* Bring it in front of other elements */
+    justify-content: space-between; 
+    align-items: center;
+    padding: 10px 20px; 
+    background-color: #baf2f6; 
+    border-bottom: 1px solid #ddd; 
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(249, 248, 248, 0.1); 
+    position: fixed;
+    top: 0; 
+    left: 0;
+    z-index: 1000;
 }
 
 .navbar-brand {
-    font-size: 24px; /* Adjust font size */
-    font-weight: bold; /* Bold text */
+    font-size: 24px;
+    font-weight: bold; 
 }
 
 .logout-button {
-    padding: 8px 16px; /* Button padding */
-    border: none; /* Remove default border */
-    background-color: #09a8b3; /* Bootstrap primary color */
-    color: white; /* Text color */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
+    padding: 8px 16px;
+    border: none;
+    background-color: #09a8b3;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .logout-button:hover {
-    background-color: #3ecbc6; /* Darker shade on hover */
+    background-color: #3ecbc6;
 }

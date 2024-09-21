@@ -20,9 +20,7 @@ function Signup() {
         },
         { withCredentials: true }
       )
-      .then((result) => {
-        console.log(result);
-      })
+      .then((result) => {})
       .catch((error) => {
         if (error.response && error.response.data) {
           setErrorMessage(error.response.data.message);

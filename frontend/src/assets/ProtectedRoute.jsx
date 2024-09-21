@@ -26,7 +26,6 @@ const ProtectedRoute = ({ children }) => {
   }, [navigate]);
 
   if (isAuthenticated === null) {
-    // While waiting for authentication check
     return <div>Loading...</div>;
   }
 

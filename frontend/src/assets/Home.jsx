@@ -17,9 +17,6 @@ function Home() {
       setUser({ username, email });
     }
   }, [location.search]);
-
-  console.log("user is", user);
-
   return (
     <div className="home">
       <Navbar />

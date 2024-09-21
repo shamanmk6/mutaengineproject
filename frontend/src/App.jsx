@@ -10,8 +10,6 @@ import ChangePassword from './assets/ChangePassword'
 import ProtectedRoute from './assets/ProtectedRoute'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div>
       <BrowserRouter>
