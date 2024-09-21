@@ -1,36 +1,56 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
-import './Login.css';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import "./Login.css";
 
 function Login() {
+  const navigate = useNavigate();
+  const location=useLocation()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage,setErrorMessage]=useState("")
+  const [errorMessage, setErrorMessage] = useState("");
   let handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/", { email: email, password: password },{headers:{'Content-Type': 'application/json'}})
-      .then((result) => {
-        console.log(result);
-        setErrorMessage("")
+      .post(
+        "http://localhost:3000/",
+        { email, password },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
+
+      .then((response) => {
+        console.log(response);
+        // console.log("token is",result.data.token);
+        const user=response.data.user
+        setErrorMessage("");
+        navigate("/home",{ replace: true,state:{user}});
       })
       .catch((error) => {
-        if(error.response && error.response.data){
-            setErrorMessage(error.response.data.message)
-        }else{
-            setErrorMessage("An unexpected error occured")
+        if (error.response && error.response.data) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("An unexpected error occured");
         }
         console.log(error);
-        setEmail("")
-        setPassword("")
+        setEmail("");
+        setPassword("");
       });
   };
 
   const handleGoogleLogin = () => {
     // Logic to handle Google login
     console.log("Google Login initiated");
+    window.location.href = "http://localhost:3000/auth/google"; // Redirect to backend Google login
+    console.log("Google Login initiated");
   };
+   
+  const handleForgotPassword=()=>{
+    console.log("forgot password");
+    navigate('/forgot-password')
+  }
 
   return (
     <div className="login-form">
@@ -47,19 +67,27 @@ function Login() {
         <div className="form-group">
           <p>Password</p>
           <input
-            type="password" value={password}
+            type="password"
+            value={password}
             onChange={(evnt) => setPassword(evnt.target.value)}
           />
         </div>
         <button type="submit">Login</button>
-        <button className="google-button" type="button" onClick={handleGoogleLogin}>
+        <button
+          className="google-button"
+          type="button"
+          onClick={handleGoogleLogin}
+        >
           Login with Google
         </button>
       </form>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="signup-route">
+        <p onClick={handleForgotPassword} style={{cursor:"pointer"}} >Forgot Password?</p>
         <p>Don't have an account?</p>
-        <Link className="signup-button" to="/register">Signup</Link>
+        <Link className="signup-button" to="/register">
+          Signup
+        </Link>
       </div>
     </div>
   );

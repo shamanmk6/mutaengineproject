@@ -1,22 +1,46 @@
-const express=require('express')
-const cookieParser=require('cookie-parser')
-const cors=require('cors')
-const db=require ('./config/connection')
-const app=express()
-const UserRoute=require('./routes/userRouter')
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import session from "express-session";
+import dotenv from "dotenv";
+dotenv.config({});
 
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(cookieParser())
-const corsOptions={
-    Origin:'https://localhost:5173',
-    credential:true
-}
-app.use(cors(corsOptions))
-db.connectMongoClient()
+import { connectMongoClient } from "./config/connection.js";
+import { UserRoute } from "./routes/userRouter.js";
+import { AuthenticationRoute } from "./routes/authenticationRoute.js";
+import { passport } from "./controllers/googleAuthController.js";
 
-const PORT=3000
+const app = express();
 
-app.use('/',UserRoute)
-app.listen(PORT,()=>{console.log(`Server running at ${PORT}`);
-})
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+const corsOptions = {
+  origin: "http://127.0.0.1:5173",
+  credentials: true,
+};
+
+app.use(cookieParser());
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: "secretKey",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+connectMongoClient();
+const PORT = 3000;
+app.use("/", UserRoute);
+app.use("/auth", AuthenticationRoute);
+app.listen(PORT, () => {
+  console.log(`Server running at ${PORT}`);
+});

@@ -1,0 +1,19 @@
+.order{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.order button{
+    margin: 5px;
+    background-color: rgb(9, 128, 108);
+    height: 40px;
+    color: azure;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 900;
+}
+.order button:hover{
+    background-color:rgb(71, 205, 183) ;
+}

@@ -128,3 +128,10 @@ body {
     font-size: 14px;
     margin-top: 10px;
   }
+  .success-message {
+    color: rgb(173, 239, 249);
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: 900;
+    font-size: large;
+  }

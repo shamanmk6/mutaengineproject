@@ -1,34 +1,37 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import './Signup.css';
+import "./Signup.css";
 
 function Signup() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
   let handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/register", {
-        email: email,
-        username: username,
-        password: password,
-      })
+      .post(
+        "http://localhost:3000/register",
+        {
+          email: email,
+          username: username,
+          password: password,
+        },
+        { withCredentials: true }
+      )
       .then((result) => {
         console.log(result);
       })
       .catch((error) => {
+        if (error.response && error.response.data) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("An unexpected error occured");
+        }
         console.log(error);
       });
   };
-
-  const handleGoogleSignup = () => {
-    // Logic for Google signup
-    console.log("Google Signup initiated");
-  };
-
   return (
     <div className="signup-form">
       <h1>Signup</h1>
@@ -52,18 +55,19 @@ function Signup() {
         <div className="form-group">
           <p>Password</p>
           <input
-            type="password" value={password}
+            type="password"
+            value={password}
             onChange={(evnt) => setPassword(evnt.target.value)}
           />
         </div>
         <button type="submit">Signup</button>
-        <button className="google-button" type="button" onClick={handleGoogleSignup}>
-          Signup with Google
-        </button>
       </form>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="login-route">
         <p>Already have an account?</p>
-        <Link className="login-button" to="/">Login</Link>
+        <Link className="login-button" to="/">
+          Login
+        </Link>
       </div>
     </div>
   );
