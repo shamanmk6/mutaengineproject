@@ -19,7 +19,7 @@ function Signup() {
 
     axios
       .post(
-        "http://localhost:3000/register",
+        "http://52.66.101.28:3000/register",
         {
           email: email,
           username: username,

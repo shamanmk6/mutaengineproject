@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   let handleLogout = () => {
     axios
-      .post("http://localhost:3000/logout", {}, { withCredentials: true })
+      .post("http://52.66.101.28:3000/logout", {}, { withCredentials: true })
       .then((response) => {
         navigate("/");
       });

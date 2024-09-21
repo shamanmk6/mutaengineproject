@@ -10,7 +10,7 @@ function ForgotPassword() {
     event.preventDefault();
 
     axios
-      .post("http://localhost:3000/forgot-password", { email: email })
+      .post("http://52.66.101.28:3000/forgot-password", { email: email })
       .then((response) => {
         const userId = response.data.userId;
         const otp = response.data.otp;

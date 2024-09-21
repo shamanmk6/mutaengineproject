@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:3000/",
+        "http://52.66.101.28:3000/",
         { email, password,recaptchaValue},
         {
           headers: { "Content-Type": "application/json" },
@@ -44,7 +44,7 @@ function Login() {
     setRecaptchaValue(value);
   }
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3000/auth/google";
+    window.location.href = "http://52.66.101.28:3000/auth/google";
   };
   const handleForgotPassword = () => {
     console.log("forgot password");

@@ -29,7 +29,7 @@ const Cart = (user) => {
   const totalPrice = product.price * product.quantity;
   const handlePayNow = () => {
     axios
-      .post("http://localhost:3000/generateRazorpay", {
+      .post("http://52.66.101.28:3000/generateRazorpay", {
         totalPrice: totalPrice,
       })
       .then((response) => {
@@ -72,7 +72,7 @@ const Cart = (user) => {
 
   const verifyPayment = (payment, order) => {
     axios
-      .post("http://localhost:3000/verify-payment", { payment, order })
+      .post("http://52.66.101.28:3000/verify-payment", { payment, order })
       .then((response) => {
         if (response.data.success) {
           navigate("/invoice", { state: { user } });
