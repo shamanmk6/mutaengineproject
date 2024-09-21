@@ -11,7 +11,7 @@ function Invoice() {
     setSuccessMessage("");
     axios
       .post(
-        "http://52.66.101.28:3000/download-invoice",
+        "https://52.66.113.235/download-invoice",
         {},
         { responseType: "blob" }
       )
@@ -30,7 +30,7 @@ function Invoice() {
   };
   const handleEmail = () => {
     axios
-      .post("http://52.66.101.28:3000/mail-invoice", { user: user })
+      .post("https://52.66.113.235/mail-invoice", { user: user })
       .then((response) => {
         console.log("Invoice sent via  mail!", response.data);
         setSuccessMessage(response.data.message);

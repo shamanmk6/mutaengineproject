@@ -19,7 +19,7 @@ function Signup() {
 
     axios
       .post(
-        "http://52.66.101.28:3000/register",
+        "https://52.66.113.235/register",
         {
           email: email,
           username: username,

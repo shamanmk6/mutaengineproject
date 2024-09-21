@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get("http://52.66.101.28:3000/auth/check", { withCredentials: true })
+      .get("https://52.66.113.235/auth/check", { withCredentials: true })
       .then((response) => {
         if (response.data.success) {
           setIsAuthenticated(true);

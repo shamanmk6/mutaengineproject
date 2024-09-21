@@ -12,7 +12,7 @@ function ChangePassword(){
     const handleSubmit=(event)=>{
           event.preventDefault()
           if(newPassword === reenteredPassword){
-            axios.post('http://52.66.101.28:3000/change-password',{newPassword,userId}).then((response)=>{
+            axios.post('https://52.66.113.235/change-password',{newPassword,userId}).then((response)=>{
                  navigate('/')
             }).catch((error)=>{
                    console.log(error);

@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     axios
       .post(
-        "http://52.66.101.28:3000/",
+        "https://52.66.113.235/",
         { email, password,recaptchaValue},
         {
           headers: { "Content-Type": "application/json" },
@@ -24,7 +24,7 @@ function Login() {
         }
       )
 
-      .then((response) => {
+      .then((response) => { 
         const user = response.data.user;
         setErrorMessage("");
         navigate("/home", { replace: true, state: { user } });
@@ -44,7 +44,7 @@ function Login() {
     setRecaptchaValue(value);
   }
   const handleGoogleLogin = () => {
-    window.location.href = "http://52.66.101.28:3000/auth/google";
+    window.location.href = "https://52.66.113.235/auth/google";
   };
   const handleForgotPassword = () => {
     console.log("forgot password");
