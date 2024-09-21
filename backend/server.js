@@ -19,7 +19,7 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 const corsOptions = {
-  origin: "http://127.0.0.1:5173",
+  origin: "https://master.d114m935qn6bgy.amplifyapp.com/",
   credentials: true,
 };
 

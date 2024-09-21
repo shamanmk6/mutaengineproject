@@ -57,7 +57,7 @@ const googleCallback = (req, res, next) => {
     console.log(user);
 
     if (err || !user) {
-      return res.redirect("http://127.0.0.1:5173");
+      return res.redirect("https://master.d114m935qn6bgy.amplifyapp.com/");
     }
     try {
       const payLoad = { userId: user._id };
@@ -73,7 +73,7 @@ const googleCallback = (req, res, next) => {
       const username = encodeURIComponent(user.username);
       const email = encodeURIComponent(user.email);
       res.redirect(
-        `http://127.0.0.1:5173/home?username=${username}&email=${email}`
+        `https://master.d114m935qn6bgy.amplifyapp.com/home?username=${username}&email=${email}`
       );
     } catch (error) {
       console.log("Error during Google login:", error);
