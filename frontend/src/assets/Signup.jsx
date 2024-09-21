@@ -1,15 +1,22 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ReCAPTCHA from 'react-google-recaptcha'
 import axios from "axios";
 import "./Signup.css";
-
+const SITE_KEY = import.meta.env.VITE_GOOGLE_RECAPTCHA_KEY;
 function Signup() {
+  const navigate=useNavigate()
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [recaptchaValue,setRecaptchaValue]=useState('')
+  const captchaRef=useRef()
   let handleSubmit = (e) => {
     e.preventDefault();
+    
+    captchaRef.current.reset();
+
     axios
       .post(
         "http://localhost:3000/register",
@@ -17,10 +24,13 @@ function Signup() {
           email: email,
           username: username,
           password: password,
+          recaptchaValue
         },
         { withCredentials: true }
       )
-      .then((result) => {})
+      .then((response) => {
+            navigate('/')
+      })
       .catch((error) => {
         if (error.response && error.response.data) {
           setErrorMessage(error.response.data.message);
@@ -30,6 +40,9 @@ function Signup() {
         console.log(error);
       });
   };
+  const onChange=(value)=>{
+         setRecaptchaValue(value);
+  }
   return (
     <div className="signup-form">
       <h1>Signup</h1>
@@ -57,6 +70,9 @@ function Signup() {
             value={password}
             onChange={(evnt) => setPassword(evnt.target.value)}
           />
+        </div>
+        <div className="">
+          <ReCAPTCHA sitekey={SITE_KEY} onChange={onChange} ref={captchaRef}/>
         </div>
         <button type="submit">Signup</button>
       </form>

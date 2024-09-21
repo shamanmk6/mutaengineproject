@@ -1,20 +1,23 @@
-import { useState } from "react";
+import { useState ,useRef} from "react";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import ReCAPTCHA from 'react-google-recaptcha'
 import "./Login.css";
-
+const SITE_KEY = import.meta.env.VITE_GOOGLE_RECAPTCHA_KEY;
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [recaptchaValue,setRecaptchaValue]=useState('')
+  const captchaRef=useRef()
   let handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post(
         "http://localhost:3000/",
-        { email, password },
+        { email, password,recaptchaValue},
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -37,7 +40,9 @@ function Login() {
         setPassword("");
       });
   };
-
+  const onChange=(value)=>{
+    setRecaptchaValue(value);
+  }
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:3000/auth/google";
   };
@@ -64,6 +69,9 @@ function Login() {
             value={password}
             onChange={(evnt) => setPassword(evnt.target.value)}
           />
+        </div>
+        <div className="">
+          <ReCAPTCHA sitekey={SITE_KEY} onChange={onChange} ref={captchaRef}/>
         </div>
         <button type="submit">Login</button>
         <button

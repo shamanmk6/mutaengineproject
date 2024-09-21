@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import nodeMailer from "nodemailer";
+import axios from "axios";
 import fs, { WriteStream } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -26,28 +27,48 @@ const instance = new Razorpay({
 
 export const registerUser = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
-    if (!username || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Something is missing", success: false });
-    }
-    const user = await getDb().collection(USER_COLLECTION).findOne({ email });
-    if (user) {
-      return res
-        .status(400)
-        .json({ message: "User is already registered", success: false });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    await getDb().collection(USER_COLLECTION).insertOne(newUser);
-    return res
-      .status(200)
-      .json({ message: "User registered Successfully", success: true });
+    const { email, username, password, recaptchaValue } = req.body;
+    console.log(process.env.GOOGLE_RECAPTCHA_SECRET);
+
+    axios({
+      url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.GOOGLE_RECAPTCHA_SECRET}&response=${recaptchaValue}`,
+      method: "POST",
+    })
+      .then(async ({ data }) => {
+        console.log(data);
+        if (data.success) {
+          if (!username || !email || !password) {
+            return res
+              .status(400)
+              .json({ message: "Something is missing", success: false });
+          }
+          const user = await getDb()
+            .collection(USER_COLLECTION)
+            .findOne({ email });
+          if (user) {
+            return res
+              .status(400)
+              .json({ message: "User is already registered", success: false });
+          }
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+          });
+          await getDb().collection(USER_COLLECTION).insertOne(newUser);
+          return res
+            .status(200)
+            .json({ message: "User registered Successfully", success: true });
+        } else {
+          return res
+            .status(400)
+            .json({ message: "Recaptcha verification failed!" });
+        }
+      })
+      .catch((error) => {
+        res.status(400).json({ message: "Invalid Recaptcha!" });
+      });
   } catch (error) {
     console.log(error);
     return res
@@ -58,42 +79,68 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email or password is missing", success: false });
-    }
-    let user = await getDb().collection(USER_COLLECTION).findOne({ email });
-    if (!user) {
-      return res
-        .status(400)
-        .json({ message: "User not exist", success: false });
-    }
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res
-        .status(400)
-        .json({ message: "Password is incorrect", success: false });
-    }
-    const payLoad = { message: "User login successful", userId: user._id };
-    const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-    user = { _id: user._id, username: user.username, email: user.email };
-    return res
-      .status(200)
-      .cookie("token", token, {
-        maxAge: 1 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
+    const { email, password, recaptchaValue } = req.body;
+
+    axios({
+      url: `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.GOOGLE_RECAPTCHA_SECRET}&response=${recaptchaValue}`,
+      method: "POST",
+    })
+      .then(async ({ data }) => {
+        console.log(data);
+        
+        if (data.success) {
+          if (!email || !password) {
+            return res
+              .status(400)
+              .json({
+                message: "Email or password is missing",
+                success: false,
+              });
+          }
+          let user = await getDb()
+            .collection(USER_COLLECTION)
+            .findOne({ email });
+          if (!user) {
+            return res
+              .status(400)
+              .json({ message: "User not exist", success: false });
+          }
+          const isPasswordMatch = await bcrypt.compare(password, user.password);
+          if (!isPasswordMatch) {
+            return res
+              .status(400)
+              .json({ message: "Password is incorrect", success: false });
+          }
+          const payLoad = {
+            message: "User login successful",
+            userId: user._id,
+          };
+          const token = jwt.sign(payLoad, process.env.JWT_SECRET, {
+            expiresIn: "1d",
+          });
+          user = { _id: user._id, username: user.username, email: user.email };
+          return res
+            .status(200)
+            .cookie("token", token, {
+              maxAge: 1 * 24 * 60 * 60 * 1000,
+              httpOnly: true,
+              secure: true,
+              sameSite: "None",
+            })
+            .json({
+              message: `Welcome ${user.username}`,
+              success: true,
+              user,
+              token,
+            });
+        } else {
+          return res
+            .status(400)
+            .json({ message: "Recaptcha verification failed!" });
+        }
       })
-      .json({
-        message: `Welcome ${user.username}`,
-        success: true,
-        user,
-        token,
+      .catch((error) => {
+        res.status(400).json({ message: "Invalid Recaptcha!" });
       });
   } catch (error) {
     console.log(error);
@@ -192,7 +239,7 @@ export const forgotPassword = async (req, res) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user:process.env.SMTP_EMAIL,
+        user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
       },
     });
@@ -205,7 +252,7 @@ export const forgotPassword = async (req, res) => {
     });
 
     const mailOptions = {
-      from:process.env.SMTP_EMAIL,
+      from: process.env.SMTP_EMAIL,
       to: email,
       subject: "For verification mail",
       text: `Your otp is: ${otp}`,
@@ -359,12 +406,12 @@ export const mailInvoice = async (req, res) => {
         secure: false,
         requireTLS: true,
         auth: {
-          user:process.env.SMTP_EMAIL,
+          user: process.env.SMTP_EMAIL,
           pass: process.env.SMTP_PASSWORD,
         },
       });
       const mailOptions = {
-        from:process.env.SMTP_EMAIL,
+        from: process.env.SMTP_EMAIL,
         to: email,
         subject: "Your Invoice",
         text: `Please find the attached your invoice`,
