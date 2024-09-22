@@ -14,6 +14,7 @@ function Login() {
   const captchaRef=useRef()
   let handleSubmit = (e) => {
     e.preventDefault();
+    captchaRef.current.reset();
     axios
       .post(
         "https://goshopper.shop/",
